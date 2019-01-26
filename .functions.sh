@@ -1,3 +1,6 @@
+
+export DEV_HOME='/Users/macbook1/district/docker_build'
+
 show_images() {
     docker inspect --format='{{.Id}} {{.Parent}}' $(docker images -a -q)
 }
@@ -56,7 +59,6 @@ fetch_all() {
         echo -e "\tcd $DEV_DIR"
         cd $DEV_DIR
     fi
-    ## TODO: instead of defining the repos in this array, go to the default docker root, list all the folders and add them as a repo list.
 
     echo -e "Found \n$(ls $DEV_DIR)"
     for item in $(ls $DEV_DIR)
