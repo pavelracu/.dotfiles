@@ -47,26 +47,24 @@ docker_clean() {
 }
 
 fetch_all() {
-    if [ ! -d "${HOMEDIR}" ]; then
-        echo "Docker root directory not defined. Execute the command export HOMEDIR=/path/to/your/docker_dir"
+    if [ ! -d "${DEV_DIR}" ]; then
+        echo "Docker root directory not defined. Execute the command export DEV_DIR=/path/to/your/docker_dir"
         return 1;
     fi
 
-    if [ "$PWD" != "$HOMEDIR" ]; then
-        echo -e "\tcd $HOMEDIR"
-        cd $HOMEDIR
+    if [ "$PWD" != "$DEV_DIR" ]; then
+        echo -e "\tcd $DEV_DIR"
+        cd $DEV_DIR
     fi
-
-    ## array with the repo names
     ## TODO: instead of defining the repos in this array, go to the default docker root, list all the folders and add them as a repo list.
-    repos=(district-architecture district-backend district-meeting-room-manager district-proxy-router flare)
 
-    for item in ${repos[*]}
+    echo -e "Found \n$(ls $DEV_DIR)"
+    for item in $(ls $DEV_DIR)
     do
-        if [ -d "$HOMEDIR/$item" ]; then
-        echo -e " \tcd $HOMEDIR/$item"
-        cd $HOMEDIR/$item
-        echo -e "\n\tExecuting git fetch --all in $HOMEDIR/$item"
+        if [[ (-d "$DEV_DIR/$item") && (-d "$DEV_DIR/$item/.git") ]]; then
+        echo -e " \tcd $DEV_DIR/$item"
+        cd $DEV_DIR/$item
+        echo -e "\n\tExecuting git fetch --all in $DEV_DIR/$item"
         git fetch --all
         fi
     done
