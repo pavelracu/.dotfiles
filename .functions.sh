@@ -110,5 +110,8 @@ get_migration_number() {
     ## Fetch all branches from origin and add them to a list/array
     ## Check what's the latest migration file on master (or should it be the dev???) and add the number as the inicial migration number
 
-    ## As the user if he is sure that that the migration number should be pushed to the branch
+    ## Ask the user if he is sure that the migration number should be pushed to the branch
+    ## Ask the user for the name of the migration number
+    ##
+
 }
