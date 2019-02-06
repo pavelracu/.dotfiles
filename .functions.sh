@@ -124,8 +124,8 @@ cd_migration() {
     fi
 
     #echo -e "\t...cd $DEV_HOME/district-architecture/sql/db/migrations"
-    migrationFolder="$DEV_HOME/district-architecture/sql/db/migrations"
-    cd $migrationFolder
+    migration_folder="$DEV_HOME/district-architecture/sql/db/migrations"
+    cd $migration_folder
 }
 
 generate_migration_script() {
@@ -139,7 +139,7 @@ generate_migration_script() {
     RED='\033[0;31m'
     GREEN='\033[32m'
     NC='\033[0m' # No Color
-    initialPath=$PWD
+    initial_path=$PWD
 
     if [[ "$simulated_mode" = true ]]; then
         echo "${GREEN}Runing in simulated mode.${NC}"
@@ -150,10 +150,10 @@ generate_migration_script() {
     cd_migration
     git fetch --all
 
-    currentMigrationFile=$(ls | sort -V | tail -n 1)
-    currentMigrationNumber=${currentMigrationFile%%_*}
+    current_migration_file=$(ls | sort -V | tail -n 1)
+    current_migration_number=${current_migration_file%%_*}
 
-    echo -e "\nCurent migration number: $currentMigrationNumber\n"
+    echo -e "\nCurent migration number: $current_migration_number\n"
 
     ## Check the latest migration script name for all local branches
     echo "\t...Checking latest migration files on local branches"
@@ -163,15 +163,15 @@ generate_migration_script() {
         if [[ "X$branch" == "X*" ]]; then
             continue
         fi
-        lastestMigrationFileOnLocal=$(git ls-tree $branch --name-only | tail -1)
+        lastest_migration_file_on_local=$(git ls-tree $branch --name-only | tail -1)
         ## As seen on http://mywiki.wooledge.org/BashGuide/Parameters#Parameter_Expansion
-        lastestMigrationNumberOnLocal=${lastestMigrationFileOnLocal%%_*}
+        lastest_migration_number_on_local=${lastest_migration_file_on_local%%_*}
 
-        #echo "\t...Checking latest migration file on local $branch --> $lastestMigrationNumberOnLocal"
+        #echo "\t...Checking latest migration file on local $branch --> $lastest_migration_number_on_local"
 
-        if [[ "$currentMigrationNumber" -le "$lastestMigrationNumberOnLocal" ]]; then
-            currentMigrationNumber=$(($lastestMigrationNumberOnLocal + 1))
-            echo "...Changing the current migration number to: $currentMigrationNumber"
+        if [[ "$current_migration_number" -le "$lastest_migration_number_on_local" ]]; then
+            current_migration_number=$(($lastest_migration_number_on_local + 1))
+            echo "...Changing the current migration number to: $current_migration_number"
         fi
     done
 
@@ -185,19 +185,19 @@ generate_migration_script() {
         if [[ "X$branch" == "X->" ]]; then
             continue
         fi
-        lastestMigrationFileOnRemote=$(git ls-tree -r $branch --name-only | tail -1)
+        lastest_migration_file_on_remote=$(git ls-tree -r $branch --name-only | tail -1)
         ## As seen on http://mywiki.wooledge.org/BashGuide/Parameters#Parameter_Expansion
-        lastestMigrationNumberOnRemote=${lastestMigrationFileOnRemote%%_*}
+        lastest_migration_number_on_remote=${lastest_migration_file_on_remote%%_*}
 
-        if [[ "$currentMigrationNumber" -le "$lastestMigrationNumberOnRemote" ]]; then
-            currentMigrationNumber=$(($lastestMigrationNumberOnRemote + 1))
-            echo "Changing the current migration number to: $currentMigrationNumber"
+        if [[ "$current_migration_number" -le "$lastest_migration_number_on_remote" ]]; then
+            current_migration_number=$(($lastest_migration_number_on_remote + 1))
+            echo "Changing the current migration number to: $current_migration_number"
         fi
 
-        ##echo "\t...Checking latest migration file on remote $branch --> $lastestMigrationNumberOnRemote"
+        ##echo "\t...Checking latest migration file on remote $branch --> $lastest_migration_number_on_remote"
     done
 
-    echo "\nNext migration number: ${GREEN}$currentMigrationNumber${NC}"
+    echo "\nNext migration number: ${GREEN}$current_migration_number${NC}"
 
     current_branch=$(git symbolic-ref --short -q HEAD)
     if [[ "$current_branch" == "master" ]] || [[ "$current_branch" == "dev" ]]; then
@@ -206,31 +206,31 @@ generate_migration_script() {
     fi
 
     echo -e "\nPlease input the migration script name (without the extention and the migration number)"
-    read migrationScriptName
-    echo "Will create the script ${currentMigrationNumber}_${migrationScriptName}.sql"
+    read migration_script_name
+    echo "Will create the script ${current_migration_number}_${migration_script_name}.sql"
 
-    migrationScriptFullName=${currentMigrationNumber}_${migrationScriptName}.sql
+    migration_script_full_name=${current_migration_number}_${migration_script_name}.sql
 
-    if [[ "$PWD" == "$migrationFolder" ]]; then
+    if [[ "$PWD" == "$migration_folder" ]]; then
 
         if [[ "$simulated_mode" = true ]]; then
             echo "${GREEN}Program runned in simulated mode. Will exit now.${NC}"
-            cd $initialPath
+            cd $initial_path
             return 1
         fi
 
-        touch ${currentMigrationNumber}_${migrationScriptName}.sql
-        currentMigrationNumber=0
-        echo "-- migrate:up" > $migrationScriptFullName
-        echo "-- migrate:down" >> $migrationScriptFullName
-        echo "Ready to ${RED}ADD${NC}, ${RED}COMMIT${NC} and ${RED}PUSH${NC} the file $migrationScriptFullName to ${RED}$current_branch${NC} branch.\nWant to proceed? (y/N)."
+        touch ${current_migration_number}_${migration_script_name}.sql
+        current_migration_number=0
+        echo "-- migrate:up" > $migration_script_full_name
+        echo "-- migrate:down" >> $migration_script_full_name
+        echo "Ready to ${RED}ADD${NC}, ${RED}COMMIT${NC} and ${RED}PUSH${NC} the file $migration_script_full_name to ${RED}$current_branch${NC} branch.\nWant to proceed? (y/N)."
         read answer
         case $answer in
-            [Yy]* ) git add $migrationScriptFullName; git commit -m"Added $migrationScriptFullName migration file"; git push origin $(git symbolic-ref --short -q HEAD);;
-            [Nn]* ) echo "Nothing added to git staging. Will revert the changes"; git clean -f $migrationScriptFullName;;
+            [Yy]* ) git add $migration_script_full_name; git commit -m"Added $migration_script_full_name migration file"; git push origin $(git symbolic-ref --short -q HEAD);;
+            [Nn]* ) echo "Nothing added to git staging. Will revert the changes"; git clean -f $migration_script_full_name;;
         esac
     fi
-    cd $initialPath
+    cd $initial_path
 }
 
 
