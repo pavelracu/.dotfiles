@@ -72,7 +72,7 @@ fetch_all() {
     done
 }
 
-generate_tocken() {
+generate_token() {
     case "$1" in
         -l) url='http://localhost/oauth/v2/token';;
         -s) url='https://staging-api.district-tech.com/oauth/v2/token';;
@@ -106,12 +106,134 @@ generate_tocken() {
 
 }
 
-get_migration_number() {
-    ## Fetch all branches from origin and add them to a list/array
-    ## Check what's the latest migration file on master (or should it be the dev???) and add the number as the inicial migration number
+cd_migration() {
+    if [[ ! -d $DEV_HOME ]]; then
+        echo -e "\tDEV_HOME not defined. Please use export DEV_HOME=/path/to/your/docker_dir"
+    else
+        if [[ ! -d $DEV_HOME/district-architecture ]]; then
+            echo -e "Could not find district-architecture folder in DEV_HOME"
+            return 1
+        fi
+        #echo -e "...cd $DEV_HOME/district-architecture"
+        cd $DEV_HOME/district-architecture
+    fi
 
-    ## Ask the user if he is sure that the migration number should be pushed to the branch
-    ## Ask the user for the name of the migration number
-    ##
+    if [[ ! -d $DEV_HOME/district-architecture/sql/db/migrations ]]; then
+        echo -e "...Could not find $DEV_HOME/district-architecture/sql/db/migrations folder"
+        return 1
+    fi
 
+    #echo -e "\t...cd $DEV_HOME/district-architecture/sql/db/migrations"
+    migrationFolder="$DEV_HOME/district-architecture/sql/db/migrations"
+    cd $migrationFolder
 }
+
+generate_migration_script() {
+    simulated_mode=true
+    case "$1" in
+        -s) simulated_mode=true;;
+        -w) simulated_mode=false;;
+        *) echo -e "Usage: generate_migration_script -<option> \nOptions for environment: -s (simulated mode), -w (write mode)"; return 1
+    esac
+
+    RED='\033[0;31m'
+    GREEN='\033[32m'
+    NC='\033[0m' # No Color
+    initialPath=$PWD
+
+    if [[ "$simulated_mode" = true ]]; then
+        echo "${GREEN}Runing in simulated mode.${NC}"
+    else
+        echo "${RED}RUNNING IN WRITE MODE!!!${NC}"
+    fi
+
+    cd_migration
+    git fetch --all
+
+    currentMigrationFile=$(ls | sort -V | tail -n 1)
+    currentMigrationNumber=${currentMigrationFile%%_*}
+
+    echo -e "\nCurent migration number: $currentMigrationNumber\n"
+
+    ## Check the latest migration script name for all local branches
+    echo "\t...Checking latest migration files on local branches"
+    for branch in $(git branch)
+    do
+        ## Will ignore the "*" indicating the current branch
+        if [[ "X$branch" == "X*" ]]; then
+            continue
+        fi
+        lastestMigrationFileOnLocal=$(git ls-tree $branch --name-only | tail -1)
+        ## As seen on http://mywiki.wooledge.org/BashGuide/Parameters#Parameter_Expansion
+        lastestMigrationNumberOnLocal=${lastestMigrationFileOnLocal%%_*}
+
+        #echo "\t...Checking latest migration file on local $branch --> $lastestMigrationNumberOnLocal"
+
+        if [[ "$currentMigrationNumber" -le "$lastestMigrationNumberOnLocal" ]]; then
+            currentMigrationNumber=$(($lastestMigrationNumberOnLocal + 1))
+            echo "...Changing the current migration number to: $currentMigrationNumber"
+        fi
+    done
+
+    echo -e "\t************************************************"
+
+    ## Check the latest migration script name for all remote branches
+    echo "\t...Checking latest migration file for remote branches"
+    for branch in $(git branch -r)
+    do
+        ## Will ignore the "->"
+        if [[ "X$branch" == "X->" ]]; then
+            continue
+        fi
+        lastestMigrationFileOnRemote=$(git ls-tree -r $branch --name-only | tail -1)
+        ## As seen on http://mywiki.wooledge.org/BashGuide/Parameters#Parameter_Expansion
+        lastestMigrationNumberOnRemote=${lastestMigrationFileOnRemote%%_*}
+
+        if [[ "$currentMigrationNumber" -le "$lastestMigrationNumberOnRemote" ]]; then
+            currentMigrationNumber=$(($lastestMigrationNumberOnRemote + 1))
+            echo "Changing the current migration number to: $currentMigrationNumber"
+        fi
+
+        ##echo "\t...Checking latest migration file on remote $branch --> $lastestMigrationNumberOnRemote"
+    done
+
+    echo "\nNext migration number: ${GREEN}$currentMigrationNumber${NC}"
+
+    current_branch=$(git symbolic-ref --short -q HEAD)
+    if [[ "$current_branch" == "master" ]] || [[ "$current_branch" == "dev" ]]; then
+        echo "You are not allowed to use the script in ${RED}$current_branch${NC} branch".
+        return 1
+    fi
+
+    echo -e "\nPlease input the migration script name (without the extention and the migration number)"
+    read migrationScriptName
+    echo "Will create the script ${currentMigrationNumber}_${migrationScriptName}.sql"
+
+    migrationScriptFullName=${currentMigrationNumber}_${migrationScriptName}.sql
+
+    if [[ "$PWD" == "$migrationFolder" ]]; then
+
+        if [[ "$simulated_mode" = true ]]; then
+            echo "${GREEN}Program runned in simulated mode. Will exit now.${NC}"
+            cd $initialPath
+            return 1
+        fi
+
+        touch ${currentMigrationNumber}_${migrationScriptName}.sql
+        currentMigrationNumber=0
+        echo "-- migrate:up" > $migrationScriptFullName
+        echo "-- migrate:down" >> $migrationScriptFullName
+        echo "Ready to ${RED}ADD${NC}, ${RED}COMMIT${NC} and ${RED}PUSH${NC} the file $migrationScriptFullName to ${RED}$current_branch${NC} branch.\nWant to proceed? (y/N)."
+        read answer
+        case $answer in
+            [Yy]* ) git add $migrationScriptFullName; git commit -m"Added $migrationScriptFullName migration file"; git push origin $(git symbolic-ref --short -q HEAD);;
+            [Nn]* ) echo "Nothing added to git staging. Will revert the changes"; git clean -f $migrationScriptFullName;;
+        esac
+    fi
+    cd $initialPath
+}
+
+
+
+
+
