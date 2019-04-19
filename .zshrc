@@ -33,7 +33,10 @@ plugins=(
 # fi
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
+ export SSH_KEY_PATH="$HOME/.ssh"
+eval "$(ssh-agent -s)"
+ssh-add $SSH_KEY_PATH/pavel.racu@gmail.com
+ssh-add $SSH_KEY_PATH/pavel.racu@bee-eng.pt
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
