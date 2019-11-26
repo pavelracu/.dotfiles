@@ -35,6 +35,7 @@ plugins=(
 # ssh
  export SSH_KEY_PATH="$HOME/.ssh"
 eval "$(ssh-agent -s)"
+ssh-add $SSH_KEY_PATH/pavel.racu@gmail.com
 ssh-add $SSH_KEY_PATH/dwelling
 ssh-add $SSH_KEY_PATH/district
 
