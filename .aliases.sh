@@ -22,3 +22,6 @@ alias cdb='cd $DEV_HOME/district-backend'
 alias cda='cd $DEV_HOME/district-architecture'
 alias cdp='cd $DEV_HOME/district-proxy-router'
 alias cdm='cd $DEV_HOME/district-meeting-room-manager'
+
+## Pull all repos
+alias git-pull-all="find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull"
