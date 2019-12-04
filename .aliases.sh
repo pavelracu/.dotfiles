@@ -1,6 +1,6 @@
 
 alias cl='clear'
-alias ltr='ls -lthr'
+alias ltr='ls -lthAr'
 
 ## Custom git aliases
 alias gs='git status'
