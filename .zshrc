@@ -30,6 +30,8 @@ source $ZSH/oh-my-zsh.sh
 
 # JAVA
 
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+
 if [ ! -v JAVA_HOME ]; then
     vared -p "Please set JAVA instalation path to PATH variable: " -c tmp
     export JAVA_HOME=$tmp
@@ -39,6 +41,8 @@ if [ ! -v JAVA_HOME ]; then
     
     unset tmp
 fi
+
+export ANDROID_HOME=/home/pp/Android/Sdk
 
 # ANDROID
 if [ ! -v ANDROID_HOME ]; then
@@ -50,6 +54,9 @@ if [ ! -v ANDROID_HOME ]; then
     export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$PATH
     unset andr
 fi
+
+# DART
+export PATH=$PATH:$HOME/.pub-cache/bin
 
 # NVM
 if [[ uname -ne "Linux" ]]; then 
