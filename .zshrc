@@ -30,7 +30,7 @@ source $ZSH/oh-my-zsh.sh
 
 # JAVA
 
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 if [ ! -v JAVA_HOME ]; then
     vared -p "Please set JAVA instalation path to PATH variable: " -c tmp
