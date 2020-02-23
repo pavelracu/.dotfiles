@@ -21,6 +21,9 @@ alias dvls='docker volume ls'
 alias cr='docker-compose up -d --no-deps --build '
 
 ## Custom cd to dev directories
+alias cdm='cd $DEV_HOME/maestro'
+alias cdw='cd $DEV_HOME/maestro-web'
+alias cdwd='cd $DEV_HOME/maestro-web-deploy'
 
 ## Pull all repos
 alias git-pull-all="find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull"

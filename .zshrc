@@ -30,7 +30,7 @@ source $ZSH/oh-my-zsh.sh
 
 # JAVA
 
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
 
 if [ ! -v JAVA_HOME ]; then
     vared -p "Please set JAVA instalation path to PATH variable: " -c tmp
@@ -58,6 +58,9 @@ fi
 # DART
 export PATH=$PATH:$HOME/.pub-cache/bin
 
+# Flutter
+export PATH="$PATH:$HOME/flutter/bin"
+
 # NVM
 if [[ uname -ne "Linux" ]]; then 
     export NVM_DIR=~/.nvm
@@ -70,6 +73,7 @@ plugins=(
   docker-compose
   zsh-syntax-highlighting
   zsh-autosuggestions
+  oc
 )
 
 source $ZSH/oh-my-zsh.sh

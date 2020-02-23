@@ -1,5 +1,5 @@
 
-export DEV_HOME='/Users/macbook1/district/docker_build'
+export DEV_HOME="$HOME/maestro"
 
 show_images() {
     docker inspect --format='{{.Id}} {{.Parent}}' $(docker images -a -q)
@@ -70,40 +70,6 @@ fetch_all() {
         git fetch --all
         fi
     done
-}
-
-generate_token() {
-    case "$1" in
-        -l) url='http://localhost/oauth/v2/token';;
-        -s) url='https://staging-api.district-tech.com/oauth/v2/token';;
-        -p) url='https://api.district-tech.com/oauth/v2/token';;
-        *) echo -e "Usage: generate_tocken <env> -u <username> -p <password> \nOptions for environment: -l (localhost), -s (staging), -p (production)"; return 1
-    esac
-
-    if [ "$2" = "-u" ]; then
-        username=$3
-    else
-        echo -e "...Username not defined...Use -u user@example.com"
-        return 1
-    fi
-
-    if [ "$4" = "-p" ]; then
-        password=$5
-    else
-        echo -e "...Password not defined...Use -p password"
-        return 1
-    fi
-
-    echo "...url:      $url"
-    echo "...user:     $username"
-    echo "...password: $password"
-    curl -v \
-        --silent \
-        --request POST \
-        --header "Content-type: application/json" \
-        --data '{"username": "'$username'", "password": "'$password'", "grant_type": "password", "client_id": "SeedClient", "scope": "user_identity"}' \
-    $url 2>&1 | grep -o '"access_token": *"[^"]*"\|"refresh_token": *"[^"]*"' --color
-
 }
 
 cd_migration() {
