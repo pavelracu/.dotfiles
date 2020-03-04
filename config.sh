@@ -1,4 +1,4 @@
-sudo pacman -S -y git vim maven zsh snapd
+sudo pacman -S -y git vim maven zsh snapd nodejs npm
 
 sudo systemctl enable --now snapd.socket
 sudo ln -s /var/lib/snapd/snap /snap
@@ -21,3 +21,5 @@ sudo pacman -Syy
 
 git config --global user.email "pavel.racu@gmail.com"
 git config --global user.name "Pavel Racu"
+
+git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
