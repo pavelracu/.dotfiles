@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BRANCH_NAME="$(git symbolic-ref --short HEAD | egrep -wo 'MAESTRO-[0-9]{0,4}')";
+
+if [[ ! -z "${BRANCH_NAME// }" ]]; then
+  _echo "Appending commit message";
+  echo "$BRANCH_NAME * $(cat $1)" > $1;
+fi
