@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD | egrep -wo 'feature/MAESTRO-[0-9]*')"
+BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD | egrep -wo 'MAESTRO-[0-9]*')"
 
 if [[ ! -z "${BRANCH_NAME// }" ]]; then
   echo "$BRANCH_NAME * $(cat $1)" > $1;
