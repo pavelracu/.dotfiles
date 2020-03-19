@@ -27,3 +27,6 @@ alias cdwd='cd $DEV_HOME/maestro-web-deploy'
 
 ## Pull all repos
 alias git-pull-all="find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull"
+
+alias lobsterssh='ssh -p 36558 pavel@173.212.200.181'
+
