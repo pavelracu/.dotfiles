@@ -1,23 +1,34 @@
-sudo pacman -S -y git vim maven zsh snapd nodejs npm
+sudo apt install -y git vim maven zsh node snap 
 
 sudo systemctl enable --now snapd.socket
 sudo ln -s /var/lib/snapd/snap /snap
 
 sudo snap install code --classic
-sudo snap install postman teams-for-linux
+sudo snap install postman
 sudo snap install android-studio --classic
 sudo snap install intellij-idea-ultimate --classic
 
-sudo pacman -S docker -y
-sudo systemctl start docker
-sudo systemctl enable docker
+## install docker
+sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 
+sudo apt-key fingerprint 0EBFCD88
+
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
+
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
 sudo usermod -aG docker $USER
 
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+sudo curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Update the source listing
-sudo pacman -Syy
+#sudo pacman -Syy
 
 git config --global user.email "pavel.racu@gmail.com"
 git config --global user.name "Pavel Racu"

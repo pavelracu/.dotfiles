@@ -61,6 +61,9 @@ export PATH=$PATH:$HOME/.pub-cache/bin
 # Flutter
 export PATH="$PATH:$HOME/flutter/bin"
 
+# Openshift Client
+export PATH="$PATH:$HOME/tools/openshift-client"
+
 # NVM
 if [[ uname -ne "Linux" ]]; then 
     export NVM_DIR=~/.nvm
