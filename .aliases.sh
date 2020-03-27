@@ -32,10 +32,10 @@ alias lobsterssh='ssh -p 36558 pavel@173.212.200.181'
 
 OCP_USERNAME='qxz0rm8'
 OCP_DEV_URL='https://master-cnap-00-mp-dev2.bmwgroup.net:8443'
-OCP_INT_URL=''
+OCP_INT_URL='https://master-cnap-00-mp-dev.bmwgroup.net:8443'
 
 alias ocdev='oc login ${OCP_DEV_URL} -u ${OCP_USERNAME} '
-alias ocqa='oc login ${OCP_INT_URL} -u ${OCP_USERNAME} '
+alias ocint='oc login ${OCP_INT_URL} -u ${OCP_USERNAME} '
 
 alias ologin='oc rsh'
 # OC get resources
