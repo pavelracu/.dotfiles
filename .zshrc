@@ -24,6 +24,8 @@ if [ ! -d $ZSH/custom/plugins/zsh-syntax-highlighting ]; then
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
 
+
+#ZSH_THEME="robbyrussell"
 ZSH_THEME="geometry-modified"
 
 source $ZSH/oh-my-zsh.sh
@@ -42,33 +44,33 @@ if [ ! -v JAVA_HOME ]; then
     unset tmp
 fi
 
-export ANDROID_HOME=/home/pp/Android/Sdk
+#export ANDROID_HOME=/home/pp/Android/Sdk
 
 # ANDROID
-if [ ! -v ANDROID_HOME ]; then
-    vared -p "Please set ANDROID_HOME variable: " -c andr
-    export ANDROID_HOME=$andr
-
-    export PATH=$ANDROID_HOME/platform-tools:$PATH
-    export PATH=$ANDROID_HOME/tools:$PATH
-    export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$PATH
-    unset andr
-fi
+#if [ ! -v ANDROID_HOME ]; then
+#    vared -p "Please set ANDROID_HOME variable: " -c andr
+#    export ANDROID_HOME=$andr
+#
+#    export PATH=$ANDROID_HOME/platform-tools:$PATH
+#    export PATH=$ANDROID_HOME/tools:$PATH
+#    export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$PATH
+#    unset andr
+#fi
 
 # DART
-export PATH=$PATH:$HOME/.pub-cache/bin
+#export PATH=$PATH:$HOME/.pub-cache/bin
 
 # Flutter
-export PATH="$PATH:$HOME/flutter/bin"
+export PATH="$PATH:$HOME/tools/flutter/bin"
 
-# Openshift Client
-export PATH="$PATH:$HOME/tools/openshift-client"
+# openshfit origin
+export PATH="$PATH:$HOME/tools/openshift-origin"
 
 # NVM
-if [[ uname -ne "Linux" ]]; then 
-    export NVM_DIR=~/.nvm
-    source $(brew --prefix nvm)/nvm.sh
-fi
+#if [[ uname -ne "Linux" ]]; then 
+#    export NVM_DIR=~/.nvm
+#    source $(brew --prefix nvm)/nvm.sh
+#fi
 
 plugins=(
   git
@@ -88,7 +90,4 @@ alias reload='source $DOT_FILES/.zshrc'
 echo -e "\nLoading custom aliases..."
 source $DOT_FILES/.aliases.sh
 
-# Add Visual Studio Code (code)
-if [[ `uname` -ne "Linux" ]]; then
-    export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-fi
+

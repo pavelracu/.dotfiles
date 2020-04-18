@@ -2,43 +2,43 @@
 export DEV_HOME="$HOME/maestro"
 
 show_images() {
-    docker inspect --format='{{.Id}} {{.Parent}}' $(docker images -a -q)
+    docker.exe inspect --format='{{.Id}} {{.Parent}}' $(docker images -a -q)
 }
 
 docker_stop() {
-    runing=$(docker container ls -aq)
+    runing=$(docker.exe container ls -aq)
     echo -e "...Atempting to stop the containers"
     if [ X$runing = 'X' ]; then
         echo -e "No existing docker containters...will skip"
     else
         echo "Stopping docker containers"
-        docker stop $(docker container ls -aq)
+        docker stop $(docker.exe container ls -aq)
     fi
 }
 
 docker_rm_processes() {
-    running=$(docker ps -a -q)
+    running=$(docker.exe ps -a -q)
     echo -e "...Atempting to remove docker processes"
     if [ X$running = 'X' ]; then
         echo -e "No existing docker processes...will skip"
     else
-        docker rm $(docker ps -a -q)
-        docker-compose down --remove-orphans
+        docker.exe rm $(docker.exe ps -a -q)
+        docker-compose.exe down --remove-orphans
     fi
 }
 
 docker_rm_volumes_dangling() {
-    dangling=$(docker volume ls -qf dangling=true)
+    dangling=$(docker.exe volume ls -qf dangling=true)
     echo -e "...Atempting to remove docker volumes (dangling=true)"
     if [ X$dangling = 'X' ]; then
         echo -e "No existing docker volumes...will skip"
     else
-        docker volume rm $(docker volume ls -qf dangling=true)
+        docker volume rm $(docker.exe volume ls -qf dangling=true)
     fi
 }
 
 docker_rm_unused_img() {
-    for image ($(docker images -a | grep "<none>" | awk '{print $3}')); do
+    for image ($(docker.exe images -a | grep "<none>" | awk '{print $3}')); do
         docker rmi $image;
     done
 }
