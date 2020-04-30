@@ -15,9 +15,11 @@ if [ ! -d ~/tools/flutter ]; then
     echo "tools folder not created..will create"
     echo "...Installing flutter in background"
     mkdir -p ~/tools/flutter && sudo bash -c 'git clone https://github.com/flutter/flutter.git -b stable /home/pp/tools/flutter >/dev/null 2>&1 & disown'
+    sudo chown pp -R flutter
 else
     echo "...Installing flutter in background"
-    bash -c 'git clone https://github.com/flutter/flutter.git -b stable ~/tools/ >/dev/null 2>&1 & disown'
+    bash -c 'git clone https://github.com/flutter/flutter.git -b stable /home/pp/tools/flutter >/dev/null 2>&1 & disown'
+    sudo chown pp -R /home/pp/tools/flutter
 fi
 
 # install visual studio code
