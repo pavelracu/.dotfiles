@@ -30,6 +30,8 @@ alias git-pull-all="find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | re
 
 alias lobsterssh='ssh -p 36558 pavel@173.212.200.181'
 
+alias reload='source $~/.zshrc'
+
 OCP_USERNAME='qxz0rm8'
 OCP_DEV_URL='https://master-cnap-00-mp-dev2.bmwgroup.net:8443'
 OCP_INT_URL='https://master-cnap-00-mp-dev.bmwgroup.net:8443'
