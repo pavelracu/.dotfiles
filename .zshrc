@@ -24,15 +24,12 @@ if [ ! -d $ZSH/custom/plugins/zsh-syntax-highlighting ]; then
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
 
-
-#ZSH_THEME="robbyrussell"
 ZSH_THEME="geometry-modified"
 
 source $ZSH/oh-my-zsh.sh
 
 # JAVA
-
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+export JAVA_HOME=/usr/lib/java-1.8.0-openjdk-amd64
 
 if [ ! -v JAVA_HOME ]; then
     vared -p "Please set JAVA instalation path to PATH variable: " -c tmp
@@ -66,11 +63,6 @@ export PATH="$PATH:$HOME/tools/flutter/bin"
 # openshfit origin
 export PATH="$PATH:$HOME/tools/openshift-origin"
 
-# NVM
-#if [[ uname -ne "Linux" ]]; then 
-#    export NVM_DIR=~/.nvm
-#    source $(brew --prefix nvm)/nvm.sh
-#fi
 
 plugins=(
   git
@@ -85,9 +77,8 @@ source $ZSH/oh-my-zsh.sh
 echo -e "\nLoading custom functions..."
 source $DOT_FILES/.functions.sh
 
-alias reload='source $DOT_FILES/.zshrc'
-
 echo -e "\nLoading custom aliases..."
 source $DOT_FILES/.aliases.sh
+
 
 
