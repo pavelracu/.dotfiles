@@ -1,38 +1,33 @@
-sudo apt install -y git vim maven zsh node snap 
-
-sudo systemctl enable --now snapd.socket
-sudo ln -s /var/lib/snapd/snap /snap
-
-#sudo snap install code --classic
-#sudo snap install postman
-#sudo snap install android-studio --classic
-#sudo snap install intellij-idea-ultimate --classic
-
-## install docker
-sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-
-sudo apt-key fingerprint 0EBFCD88
-
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
+#!/bin/bash
 
 sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
-sudo usermod -aG docker $USER
 
+# install git, vim, maven and zsh in background
+sudo bash -c 'apt install -y git vim maven zsh >/dev/null 2>&1 & disown'
 
-sudo curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+## Install node js
+curl -sL https://deb.nodesource.com/setup_12.x -o /home/pp/.dotfiles/nodesource_setup.sh
+sudo bash -c 'bash nodesource_setup.sh  >/dev/null 2>&1 & disown '
+sudo bash -c 'apt install -y nodejs >/dev/null 2>&1 & disown '
 
-sudo chmod +x /usr/local/bin/docker-compose
+# install flutter
+if [ ! -d ~/tools/flutter ]; then 
+    echo "tools folder not created..will create"
+    echo "...Installing flutter in background"
+    mkdir -p ~/tools/flutter && sudo bash -c 'git clone https://github.com/flutter/flutter.git -b stable /home/pp/tools/flutter >/dev/null 2>&1 & disown'
+else
+    echo "...Installing flutter in background"
+    bash -c 'git clone https://github.com/flutter/flutter.git -b stable ~/tools/ >/dev/null 2>&1 & disown'
+fi
+
+# install visual studio code
+sudo bash -c 'echo "...Installing visual studio code in background " && sudo snap install --classic code >/dev/null 2>&1 & disown'
+
+# install intellij
+sudo bash -c 'echo "...Installing intellij in background " && sudo snap install intellij-idea-ultimate --classic >/dev/null 2>&1 & disown'
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# Update the source listing
-#sudo pacman -Syy
-
-git config --global user.email "pavel.racu@gmail.com"
 git config --global user.name "Pavel Racu"
-
 git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
-
 git config core.hooksPath ~/.dotfiles/hooks
