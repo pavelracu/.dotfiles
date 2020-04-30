@@ -1,44 +1,44 @@
 
-export DEV_HOME="$HOME/maestro"
+export DEV_HOME="$HOME/work/maestro-project"
 
 show_images() {
-    docker.exe inspect --format='{{.Id}} {{.Parent}}' $(docker images -a -q)
+    docker inspect --format='{{.Id}} {{.Parent}}' $(docker images -a -q)
 }
 
 docker_stop() {
-    runing=$(docker.exe container ls -aq)
+    runing=$(docker container ls -aq)
     echo -e "...Atempting to stop the containers"
     if [ X$runing = 'X' ]; then
         echo -e "No existing docker containters...will skip"
     else
         echo "Stopping docker containers"
-        docker stop $(docker.exe container ls -aq)
+        docker stop $(docker container ls -aq)
     fi
 }
 
 docker_rm_processes() {
-    running=$(docker.exe ps -a -q)
+    running=$(docker ps -a -q)
     echo -e "...Atempting to remove docker processes"
     if [ X$running = 'X' ]; then
         echo -e "No existing docker processes...will skip"
     else
-        docker.exe rm $(docker.exe ps -a -q)
-        docker-compose.exe down --remove-orphans
+        docker rm $(docker ps -a -q)
+        docker-compose down --remove-orphans
     fi
 }
 
 docker_rm_volumes_dangling() {
-    dangling=$(docker.exe volume ls -qf dangling=true)
+    dangling=$(docker volume ls -qf dangling=true)
     echo -e "...Atempting to remove docker volumes (dangling=true)"
     if [ X$dangling = 'X' ]; then
         echo -e "No existing docker volumes...will skip"
     else
-        docker volume rm $(docker.exe volume ls -qf dangling=true)
+        docker volume rm $(docker volume ls -qf dangling=true)
     fi
 }
 
 docker_rm_unused_img() {
-    for image ($(docker.exe images -a | grep "<none>" | awk '{print $3}')); do
+    for image ($(docker images -a | grep "<none>" | awk '{print $3}')); do
         docker rmi $image;
     done
 }
@@ -47,51 +47,6 @@ docker_clean() {
     docker_stop
     docker_rm_processes
     docker_rm_volumes_dangling
-}
-
-fetch_all() {
-    if [ ! -d "${DEV_DIR}" ]; then
-        echo "Docker root directory not defined. Execute the command export DEV_DIR=/path/to/your/docker_dir"
-        return 1;
-    fi
-
-    if [ "$PWD" != "$DEV_DIR" ]; then
-        echo -e "\tcd $DEV_DIR"
-        cd $DEV_DIR
-    fi
-
-    echo -e "Found \n$(ls $DEV_DIR)"
-    for item in $(ls $DEV_DIR)
-    do
-        if [[ (-d "$DEV_DIR/$item") && (-d "$DEV_DIR/$item/.git") ]]; then
-        echo -e " \tcd $DEV_DIR/$item"
-        cd $DEV_DIR/$item
-        echo -e "\n\tExecuting git fetch --all in $DEV_DIR/$item"
-        git fetch --all
-        fi
-    done
-}
-
-cd_migration() {
-    if [[ ! -d $DEV_HOME ]]; then
-        echo -e "\tDEV_HOME not defined. Please use export DEV_HOME=/path/to/your/docker_dir"
-    else
-        if [[ ! -d $DEV_HOME/district-architecture ]]; then
-            echo -e "Could not find district-architecture folder in DEV_HOME"
-            return 1
-        fi
-        #echo -e "...cd $DEV_HOME/district-architecture"
-        cd $DEV_HOME/district-architecture
-    fi
-
-    if [[ ! -d $DEV_HOME/district-architecture/sql/db/migrations ]]; then
-        echo -e "...Could not find $DEV_HOME/district-architecture/sql/db/migrations folder"
-        return 1
-    fi
-
-    #echo -e "\t...cd $DEV_HOME/district-architecture/sql/db/migrations"
-    migration_folder="$DEV_HOME/district-architecture/sql/db/migrations"
-    cd $migration_folder
 }
 
 generate_migration_script() {
