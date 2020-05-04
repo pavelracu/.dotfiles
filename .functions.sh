@@ -154,7 +154,96 @@ generate_migration_script() {
     cd $initial_path
 }
 
+helpFunction() {
+  echo ""
+  echo "Usage: $0 -u nexus_username -p nexus_password [--recreate_db]"
+  echo -e "\t-u | --nexus_username NEXUS_USERNAME"
+  echo -e "\t-p | --nexus_password NEXUS_PASSWORD"
+  echo -e "\t--recreate_db - Deletes existing DB container and recreates it (optional)"
+  exit 1 # Exit script after printing help
+}
 
+start_dev() {
+  while [[ $# -gt 0 ]]; do
+    opt="$1"
+    shift
+    current_arg="$1"
+    if [[ "$current_arg" =~ ^-{1,2}.* ]]; then
+      echo "WARNING: You may have left an argument blank. Double check your command."
+    fi
+    case "$opt" in
+    "-u" | "--nexus_username")
+      nexusUsername="$1"
+      shift
+      ;;
+    "-p" | "--nexus_password")
+      nexusPassword="$1"
+      shift
+      ;;
+    "-r" | "--recreate_db")
+      recreateDb='true'
+      shift
+      ;;
+    "--all")
+      all='true'  
+      shift
+      ;;
+    "--users")
+      all='false'
+      users='true'
+      shift
+      ;;
+    "--engines")
+      all='false'
+      engines='true'
+      shift
+      ;;
+    "--vehicles")
+      all='false'
+      vehicles='true'
+      shift
+      ;;
+    "-h" | "--help")
+      helpFunction
+      shift
+      ;;
+    *)
+      echo "ERROR: Invalid option: \""$opt"\"" >&2
+      helpFunction
+      exit 0
+      ;;
+    esac
+  done
 
+  # Print helpFunction in case parameters are empty
+  if [ -z "$nexusUsername" ] || [ -z "$nexusPassword" ]; then
+    echo "Mandatory parameters missing"
+    helpFunction
+  fi
 
+  USER_SERVICE="$DEV_HOME/maestro-user-service/"
+  ENGINES="$DEV_HOME/maestro-engines/"
+  VEHICLES="$DEV_HOME/maestro"
 
+  if [ "X$all" = "Xtrue" ]; then
+    docker-compose -f $USER_SERVICE/dev-docker-compose.yml -f $ENGINES/dev-docker-compose.yml -f $VEHICLES/dev-docker-compose.yml build --build-arg NEXUS_USERNAME="$nexusUsername" --build-arg NEXUS_PASSWORD="$nexusPassword"
+
+    docker-compose -f $USER_SERVICE/dev-docker-compose.yml -f $ENGINES/dev-docker-compose.yml -f $VEHICLES/dev-docker-compose.yml up --force-recreate maestro-user-service maestro-engines maestro-vehicles
+  fi
+
+  if [ "X$users" = "Xtrue" ]; then
+    docker-compose -f $USER_SERVICE/dev-docker-compose.yml build --build-arg NEXUS_USERNAME="$nexusUsername" --build-arg NEXUS_PASSWORD="$nexusPassword" maestro-user-service
+    docker-compose -f $USER_SERVICE/dev-docker-compose.yml up --force-recreate maestro-user-service
+  fi
+
+  if [ "X$engines" = "Xtrue" ]; then
+    docker-compose -f $ENGINES/dev-docker-compose.yml build --build-arg NEXUS_USERNAME="$nexusUsername" --build-arg NEXUS_PASSWORD="$nexusPassword" maestro-engines
+    docker-compose -f $ENGINES/dev-docker-compose.yml up --force-recreate maestro-engines
+  fi
+
+  if [ "X$vehicles" = "Xtrue" ]; then
+    docker-compose -f $VEHICLES/dev-docker-compose.yml build --build-arg NEXUS_USERNAME="$nexusUsername" --build-arg NEXUS_PASSWORD="$nexusPassword" maestro-vehicles
+    docker-compose -f $VEHICLES/dev-docker-compose.yml up --force-recreate maestro-vehicles
+  fi
+
+}

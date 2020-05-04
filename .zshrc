@@ -29,7 +29,7 @@ ZSH_THEME="geometry-modified"
 source $ZSH/oh-my-zsh.sh
 
 # JAVA
-export JAVA_HOME=/usr/lib/java-1.8.0-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 
 if [ ! -v JAVA_HOME ]; then
     vared -p "Please set JAVA instalation path to PATH variable: " -c tmp
