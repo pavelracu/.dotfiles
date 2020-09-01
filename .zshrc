@@ -29,22 +29,12 @@ ZSH_THEME="geometry-modified"
 source $ZSH/oh-my-zsh.sh
 
 # JAVA
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
-
-if [ ! -v JAVA_HOME ]; then
-    vared -p "Please set JAVA instalation path to PATH variable: " -c tmp
-    export JAVA_HOME=$tmp
-
-    export PATH=$PATH:$JAVA_HOME/bin
-    export PATH=$PATH:$JAVA_HOME/jre
-    
-    unset tmp
-fi
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 #export ANDROID_HOME=/home/pp/Android/Sdk
 
 # ANDROID
-#if [ ! -v ANDROID_HOME ]; then
+#if [ -v ANDROID_HOME ]; then
 #    vared -p "Please set ANDROID_HOME variable: " -c andr
 #    export ANDROID_HOME=$andr
 #
@@ -55,7 +45,7 @@ fi
 #fi
 
 # DART
-#export PATH=$PATH:$HOME/.pub-cache/bin
+export PATH=$PATH:$HOME/.pub-cache/bin
 
 # Flutter
 export PATH="$PATH:$HOME/tools/flutter/bin"
@@ -79,6 +69,3 @@ source $DOT_FILES/.functions.sh
 
 echo -e "\nLoading custom aliases..."
 source $DOT_FILES/.aliases.sh
-
-
-
