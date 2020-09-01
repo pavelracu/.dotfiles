@@ -1,6 +1,10 @@
 
 export DEV_HOME="$HOME/work/maestro-project"
 
+git config --global user.name "Pavel Racu"
+git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+git config core.hooksPath ~/.dotfiles/hooks
+
 show_images() {
     docker inspect --format='{{.Id}} {{.Parent}}' $(docker images -a -q)
 }
