@@ -27,7 +27,7 @@ docker_rm_processes() {
         echo -e "No existing docker processes...will skip"
     else
         docker rm $(docker ps -a -q)
-        docker-compose down --remove-orphans
+        docker-compose -f localdev-docker-compose.yml down --remove-orphans
     fi
 }
 
@@ -50,7 +50,6 @@ docker_rm_unused_img() {
 docker_clean() {
     docker_stop
     docker_rm_processes
-    docker_rm_volumes_dangling
 }
 
 generate_migration_script() {
