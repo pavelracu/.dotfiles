@@ -1,4 +1,5 @@
 
+source=~/.env
 alias cl='clear'
 alias ltr='ls -lthAr'
 
@@ -12,7 +13,6 @@ alias push='git push origin `git rev-parse --abbrev-ref HEAD`'
 alias dbuild='$(docker_build)'
 alias drebuild='$(docker_rebuild)'
 alias dclean='$(docker_clean)'
-alias ddebug='docker-compose -f docker-compose.yml -f docker-compose.local.debug.yml up --build'
 alias ddown='docker-compose down --remove-orphans'
 alias drm='docker rm $(docker ps -a -q)'
 alias dvls='docker volume ls'
@@ -23,7 +23,10 @@ alias cr='docker-compose up -d --no-deps --build '
 ## Custom cd to dev directories
 alias cdm='cd $DEV_HOME/maestro'
 alias cdw='cd $DEV_HOME/maestro-web'
-alias cdwd='cd $DEV_HOME/maestro-web-deploy'
+alias cdpc='cd $DEV_HOME/maestro-project-common'
+alias cdc='cd $DEV_HOME/maestro-core'
+alias cde='cd $DEV_HOME/maestro-engines'
+alias cda='cd $DEV_HOME/maestro-architecture'
 
 ## Pull all repos
 alias gua="find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} remote update"
@@ -33,12 +36,3 @@ alias gpa="find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs
 alias lobsterssh='ssh -p 36558 pavel@173.212.200.181'
 
 alias reload='source ~/.zshrc'
-
-OCP_USERNAME='qxz0rm8'
-OCP_DEV_URL='https://master-cnap-00-mp-dev2.bmwgroup.net:8443'
-OCP_INT_URL='https://master-cnap-00-mp-dev.bmwgroup.net:8443'
-
-alias ocdev='oc login ${OCP_DEV_URL} -u ${OCP_USERNAME} '
-alias ocint='oc login ${OCP_INT_URL} -u ${OCP_USERNAME} '
-
-
