@@ -26,23 +26,20 @@ fi
 
 ZSH_THEME="geometry-modified"
 
-source $ZSH/oh-my-zsh.sh
+git config --global user.name "Pavel Racu"
+git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+git config --global core.hooksPath ~/.dotfiles/hooks
+
+# source $ZSH/oh-my-zsh.sh
 
 # JAVA
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-#export ANDROID_HOME=/home/pp/Android/Sdk
-
 # ANDROID
-#if [ -v ANDROID_HOME ]; then
-#    vared -p "Please set ANDROID_HOME variable: " -c andr
-#    export ANDROID_HOME=$andr
-#
-#    export PATH=$ANDROID_HOME/platform-tools:$PATH
-#    export PATH=$ANDROID_HOME/tools:$PATH
-#    export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$PATH
-#    unset andr
-#fi
+export ANDROID_HOME=/home/pp/Android/Sdk
+export PATH=$ANDROID_HOME/platform-tools:$PATH
+export PATH=$ANDROID_HOME/tools:$PATH
+export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$PATH
 
 # DART
 export PATH=$PATH:$HOME/.pub-cache/bin
@@ -50,8 +47,8 @@ export PATH=$PATH:$HOME/.pub-cache/bin
 # Flutter
 export PATH="$PATH:$HOME/tools/flutter/bin"
 
-# openshfit origin
-export PATH="$PATH:$HOME/tools/openshift-origin"
+# Personal
+export DEV_HOME="$HOME/work/"
 
 
 plugins=(
@@ -60,7 +57,7 @@ plugins=(
   docker-compose
   zsh-syntax-highlighting
   zsh-autosuggestions
-  oc
+  node
 )
 
 source $ZSH/oh-my-zsh.sh
