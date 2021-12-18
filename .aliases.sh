@@ -17,16 +17,6 @@ alias ddown='docker-compose down --remove-orphans'
 alias drm='docker rm $(docker ps -a -q)'
 alias dvls='docker volume ls'
 
-# Container restart
-alias cr='docker-compose up -d --no-deps --build '
-
-## Custom cd to dev directories
-alias cdm='cd $DEV_HOME/maestro'
-alias cdw='cd $DEV_HOME/maestro-web'
-alias cdpc='cd $DEV_HOME/maestro-project-common'
-alias cdc='cd $DEV_HOME/maestro-core'
-alias cde='cd $DEV_HOME/maestro-engines'
-alias cda='cd $DEV_HOME/maestro-architecture'
 
 ## Pull all repos
 alias gua="find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} remote update"
