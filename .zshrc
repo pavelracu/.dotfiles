@@ -26,14 +26,12 @@ fi
 
 ZSH_THEME="geometry-modified"
 
-# git config --global user.name "Pavel Racu"
-# git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
-# git config --global core.hooksPath ~/.dotfiles/hooks
-
-# source $ZSH/oh-my-zsh.sh
+git config --global user.name "Pavel Racu"
+git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+git config --global core.hooksPath ~/.dotfiles/hooks
 
 # Unncoment this line to set JAVA_HOME JAVA 
-#export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 # ANDROID
 export ANDROID_HOME=/home/pp/Android/Sdk
