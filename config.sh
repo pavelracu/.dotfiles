@@ -17,6 +17,20 @@ else
     echo "Oh My Zsh already installed."
 fi
 
+# Check and install Git if not already installed
+if ! command -v git &> /dev/null; then
+    echo "Git not found. Installing Git..."
+    brew install git
+    echo "Git installed successfully."
+    echo "Will configure user name, email and editor..."
+    
+    git config --global user.name "Pavel Racu"
+    git config --global user.email "pavel.racu@gmail.com"
+    git config --global core.editor "code --wait"
+else
+    echo "Git already installed."
+fi
+
 # Install NVM
 if [ ! -d "$HOME/.nvm" ]; then
     echo "Installing NVM..."
